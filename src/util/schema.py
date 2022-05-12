@@ -371,7 +371,7 @@ class SettledBatchAuctionModel(BaseModel):
     """Settled batch auction data (solution)."""
 
     ref_token: TokenId = Field(
-        ...,
+        None,
         description="Token used for price vector normalization in case price "
         "vector is normalized.",
     )

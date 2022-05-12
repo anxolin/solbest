@@ -186,7 +186,7 @@ class BatchAuction:
                     continue
                 swap_result = await asyncio.to_thread(swap, str(o.sell_token), str(o.buy_token), int(o.max_sell_amount.balance))
                 exec_buy_amount = int(swap_result['buy_amount'])
-                if exec_buy_amount < int(o.buy_amount.balance):
+                if exec_buy_amount < int(o.buy_amount):
                     print("1inch couldn't satisfy limit price. Skipping ...")
                     continue
                 solution['approvals'].append({
@@ -201,7 +201,7 @@ class BatchAuction:
                 })
                 solution['prices'][str(o.buy_token)] = int(o.max_sell_amount.balance)
                 solution['prices'][str(o.sell_token)] = exec_buy_amount
-                solution['orders'][o.order_id] = o
+                solution['orders'][o.order_id] = o.as_dict()
                 solution['orders'][o.order_id]['exec_sell_amount'] = int(o.max_sell_amount.balance)
                 solution['orders'][o.order_id]['exec_buy_amount'] = exec_buy_amount
 
@@ -209,6 +209,7 @@ class BatchAuction:
                 raise
             except Exception as err:
                 print("Got a swap error: ", err)
+                #raise
 
     def sort_orders_by_expected_surplus(self, orders):
         """Sorts orders by expected surplus (using external prices)."""
