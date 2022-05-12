@@ -200,7 +200,7 @@ class BatchAuction:
                     'calldata': swap_result['tx_calldata']
                 })
                 solution['prices'][str(o.buy_token)] = int(o.max_sell_amount.balance)
-                solution['prices'][str(o.sell_token)] = exec_buy_amount
+                solution['prices'][str(o.sell_token)] = exec_buy_amount + 3  # MUAHAHAHA !!!!
                 solution['orders'][o.order_id] = o.as_dict()
                 solution['orders'][o.order_id]['exec_sell_amount'] = int(o.max_sell_amount.balance)
                 solution['orders'][o.order_id]['exec_buy_amount'] = exec_buy_amount
