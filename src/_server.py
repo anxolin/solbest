@@ -162,4 +162,5 @@ if __name__ == "":
         host=server_settings.host,
         port=server_settings.port,
         log_level=SERVER_ARGS.log_level,
+        loop='asyncio'
     )
