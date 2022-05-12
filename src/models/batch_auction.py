@@ -11,6 +11,7 @@ from typing import Any, Optional
 from src.models.order import Order, OrdersSerializedType
 from src.models.token import (
     Token,
+    TokenBalance,
     TokenInfo,
     select_token_with_highest_normalize_priority,
     TokenDict,
@@ -154,6 +155,36 @@ class BatchAuction:
 
     def solve(self) -> None:
         """Solve Batch"""
+
+        orders_by_expected_surplus = self.sort_orders_by_expected_surplus()
+        print(orders_by_expected_surplus)
+
+    def sort_orders_by_expected_surplus(self):
+        def expected_surplus(o : Order):
+            if o.is_sell_order:
+                min_buy_amount = o.max_limit.convert(o.max_sell_amount)
+                # sell_amount/buy_amount = p(buy_token)/p(sell_token)
+                # <-> buy_amount = sell_amount * p(sell_token)/p(buy_token)
+                expected_buy_amount = \
+                    TokenBalance(
+                        o.max_sell_amount.as_decimal() * self.token_info(o.sell_token).external_price /
+                            self.token_info(o.buy_token).external_price,
+                        o.buy_token
+                    )
+                return max(0, expected_buy_amount - min_buy_amount)
+            else:
+                max_sell_amount = o.max_limit.convert(o.max_buy_amount)
+                # sell_amount/buy_amount = p(buy_token)/p(sell_token)
+                # <-> sell_amount = buy_amount * p(buy_token)/p(sell_token)
+                expected_sell_amount = \
+                    TokenBalance(
+                        o.max_buy_amount.as_decimal() * self.token_info(o.buy_token).external_price /
+                            self.token_info(o.sell_token).external_price,
+                        o.sell_token
+                    )
+                return max(0, max_sell_amount - expected_sell_amount)
+        
+        return sorted(self.orders, key=expected_surplus, reverse=True)
 
     #################################
     #  SOLUTION PROCESSING METHODS  #
