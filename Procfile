@@ -1,0 +1,1 @@
+server: python -m src._server
