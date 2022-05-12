@@ -36,7 +36,7 @@ class ServerSettings(BaseSettings):
     """Basic Server Settings"""
 
     host: str = "0.0.0.0"
-    port: int = 80
+    port: int = 8080
 
 
 server_settings = ServerSettings()
@@ -134,7 +134,7 @@ async def solve(problem: BatchAuctionModel, request: Request):  # type: ignore
 # ++++ Server setup: ++++
 
 
-if __name__ == "__main__":
+if __name__ == "":
     load_dotenv()
 
     parser = argparse.ArgumentParser(
