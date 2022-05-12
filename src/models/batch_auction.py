@@ -182,7 +182,7 @@ class BatchAuction:
 
         for o in orders:
             try:
-                if str(o.sell_token) in solution['prices'].keys() or str(o.buy_token) in solution['prices'].keys():
+                if str(o.sell_token) in solution['prices'].keys() and str(o.buy_token) in solution['prices'].keys():
                     continue
                 swap_result = await asyncio.to_thread(swap, str(o.sell_token), str(o.buy_token), int(o.max_sell_amount.balance))
                 exec_buy_amount = int(swap_result['buy_amount'])
@@ -199,8 +199,18 @@ class BatchAuction:
                     'value': 0,
                     'calldata': swap_result['tx_calldata']
                 })
-                solution['prices'][str(o.buy_token)] = int(o.max_sell_amount.balance)
-                solution['prices'][str(o.sell_token)] = exec_buy_amount + 3  # MUAHAHAHA !!!!
+                npb = int(o.max_sell_amount.balance)
+                nps = exec_buy_amount + 3   # MUAHAHAHA !!!!
+                if str(o.buy_token) in solution['prices'].keys():
+                    pb = solution['prices'][str(o.buy_token)]
+                    ps = pb * nps/npb
+                else:
+                    assert str(o.sell_token) in solution['prices'].keys()
+                    ps = solution['prices'][str(o.sell_token)]
+                    pb = npb / nps * ps 
+
+                solution['prices'][str(o.buy_token)] = pb
+                solution['prices'][str(o.sell_token)] = ps
                 solution['orders'][o.order_id] = o.as_dict()
                 solution['orders'][o.order_id]['exec_sell_amount'] = int(o.max_sell_amount.balance)
                 solution['orders'][o.order_id]['exec_buy_amount'] = exec_buy_amount
