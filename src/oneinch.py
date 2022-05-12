@@ -1,3 +1,5 @@
+# All data is strings. Functions may throw.
+
 import requests
 import asyncio
 
