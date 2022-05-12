@@ -3,9 +3,6 @@ import asyncio
 
 settlement_contract_address = '0x9008D19f58AAbD9eD0D60971565AA8510560ab41',
 
-# TODO:
-# - allowance
-
 def swap(sell_token, buy_token, sell_amount):
     params = {
         'fromTokenAddress': sell_token,
@@ -24,6 +21,7 @@ def swap(sell_token, buy_token, sell_amount):
       'tx_calldata': r['tx']['data'],
     }
 
+# allowance that settlement contract has give to 1inch
 def allowance(token):
   params = {
     'tokenAddress': token,
@@ -34,6 +32,7 @@ def allowance(token):
   r = r.json()
   return r['allowance']
 
+# tx data for approving 1inch to use max allowance
 def approve(token):
   params = {
     'tokenAddress': token,
