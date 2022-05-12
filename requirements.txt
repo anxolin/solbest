@@ -7,4 +7,4 @@ pydantic==1.9.0
 pytest==7.1.1
 makefun==1.13.1
 mypy==0.942
-requests=2.27.1
+requests==2.27.1
