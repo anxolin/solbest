@@ -157,6 +157,12 @@ class BatchAuction:
         """Solve Batch"""
 
         orders_by_expected_surplus = self.sort_orders_by_expected_surplus()
+        # TODO:
+        # - get the deadline from the input
+        # - while there is time left get the next highest expected surplus order
+        # - solve it with 1inch
+        # - add 1inch's result to solution
+        # - when there is no time left return the current solution
         print(orders_by_expected_surplus)
 
     def sort_orders_by_expected_surplus(self):
