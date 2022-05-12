@@ -2,10 +2,12 @@
 
 import requests
 import asyncio
+import time
 
 settlement_contract_address = '0x9008D19f58AAbD9eD0D60971565AA8510560ab41',
 
 def swap(sell_token, buy_token, sell_amount):
+    print("Swapping", sell_token, buy_token, sell_amount)
     params = {
         'fromTokenAddress': sell_token,
         'toTokenAddress': buy_token,
@@ -14,13 +16,21 @@ def swap(sell_token, buy_token, sell_amount):
         'slippage': 50,
         'disableEstimate': True,
     }
-    r = requests.get('https://api.1inch.io/v4.0/100/swap', params=params)
-    r.raise_for_status()
-    r =  r.json()
+    #r = requests.get('https://api.1inch.io/v4.0/100/swap', params=params)
+    #r.raise_for_status()
+    #r =  r.json()
+
+    """
     return {
       'buy_amount': r['toTokenAmount'],
       'tx_to': r['tx']['to'],
       'tx_calldata': r['tx']['data'],
+    }
+    """
+    return {
+      'buy_amount': 1e18,
+      'tx_to': "0x9008D19f58AAbD9eD0D60971565AA8510560ab41",
+      'tx_calldata': "0x00",
     }
 
 # allowance that settlement contract has given to 1inch

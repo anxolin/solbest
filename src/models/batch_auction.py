@@ -19,8 +19,10 @@ from src.models.token import (
 )
 from src.models.types import NumericType
 from src.models.uniswap import Uniswap, UniswapsSerializedType
+from src.oneinch import swap, settlement_contract_address
 from src.util.enums import Chain
 
+import asyncio
 
 class BatchAuction:
     """Class to represent a batch auction."""
@@ -153,10 +155,18 @@ class BatchAuction:
         """
         return Decimal(10) ** (2 * 18 - self.token_info(self.ref_token).decimals)
 
-    def solve(self) -> None:
+    async def solve(self, solution) -> None:
         """Solve Batch"""
 
-        orders_by_expected_surplus = self.sort_orders_by_expected_surplus()
+        # TODO: exclude limit orders 
+        orders = [
+            o
+            for o in self.orders
+            if not o.is_liquidity_order and not o.allow_partial_fill and o.is_sell_order
+        ]
+
+        orders_by_expected_surplus = self.sort_orders_by_expected_surplus(orders)
+
         # TODO:
         # - get the deadline from the input
         # - while there is time left get the next highest expected surplus order
@@ -165,7 +175,27 @@ class BatchAuction:
         # - when there is no time left return the current solution
         print(orders_by_expected_surplus)
 
-    def sort_orders_by_expected_surplus(self):
+        solution['approvals'] = []
+        solution['interaction_data'] = []
+        for o in orders:
+            try:
+                swap_result = await asyncio.to_thread(swap, str(o.sell_token), str(o.buy_token), int(o.max_sell_amount.balance))
+                solution['approvals'].append({
+                    'token': str(o.sell_token),
+                    'spender': settlement_contract_address,
+                    'amount': str(int(o.max_sell_amount.as_decimal()))
+                }) 
+                solution['interaction_data'].append({
+                    'target': swap_result['tx_to'],
+                    'value': 0,
+                    'calldata': swap_result['tx_calldata']
+                })
+            except asyncio.TimeoutError as err:
+                raise
+            except Exception as err:
+                print("Got a swap error: ", err)
+
+    def sort_orders_by_expected_surplus(self, orders):
         """Sorts orders by expected surplus (using external prices)."""
         def expected_surplus(order : Order):
             if order.is_sell_order:
@@ -201,7 +231,7 @@ class BatchAuction:
                     self.token_info(order.sell_token).external_price
                 )
 
-        return sorted(self.orders, key=expected_surplus, reverse=True)
+        return sorted(orders, key=expected_surplus, reverse=True)
 
     #################################
     #  SOLUTION PROCESSING METHODS  #

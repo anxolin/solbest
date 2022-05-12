@@ -1,18 +1,18 @@
 {
     "tokens": {
-        "0x6b175474e89094c44da98b954eedeac495271d0f": {
+        "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d": {
             "decimals": 18,
             "alias": "DAI",
             "external_price": 0.0003305785123966942,
             "normalize_priority": 1
         },
-        "0x57ab1ec28d129707052df4df418d58a2d46d5f51": {
+        "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174": {
             "decimals": 18,
             "alias": "sUSD",
             "external_price": 0.0003305785123966942,
             "normalize_priority": 0
         },
-        "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
+        "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1": {
             "decimals": 18,
             "alias": "WETH",
             "external_price": 1,
@@ -21,39 +21,39 @@
     },
     "orders": {
         "0": {
-            "sell_token": "0x6b175474e89094c44da98b954eedeac495271d0f",
-            "buy_token": "0x57ab1ec28d129707052df4df418d58a2d46d5f51",
+            "sell_token": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+            "buy_token": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
             "sell_amount": "1000000_000000000000000000",
             "buy_amount": "900000_000000000000000000",
             "allow_partial_fill": false,
             "is_sell_order": true,
             "fee": {
-                "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "token": "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1",
                 "amount": "0_001000000000000000"
             },
             "cost": {
-                "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "token": "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1",
                 "amount": "0"
             },
             "mandatory": true
         },
         "1": {
-            "sell_token": "0x6b175474e89094c44da98b954eedeac495271d0f",
-            "buy_token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "sell_token": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+            "buy_token": "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1",
             "sell_amount": "3268_000000000000000000",
             "buy_amount": "1_000000000000000000",
             "allow_partial_fill": false,
             "is_sell_order": true,
             "fee": {
-                "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "token": "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1",
                 "amount": "0_001000000000000000"
             },
             "cost": {
-                "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                "token": "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1",
                 "amount": "0"
             }
         }
     },
-    "metadata":{"environment":"Ethereum / Mainnet","auction_id":5631,"gas_price":52792096858.666664,"native_token":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    "metadata":{"environment":"Ethereum / Mainnet","auction_id":5631,"gas_price":52792096858.666664,"native_token":"0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1"
     }    
 }

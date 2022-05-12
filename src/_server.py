@@ -4,6 +4,7 @@ This is the project's Entry point.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import decimal
 import logging
 
@@ -65,7 +66,14 @@ async def solve(problem: BatchAuctionModel, request: Request):  # type: ignore
     print("Parameters Supplied", solver_args)
 
     # 1. Solve BatchAuction: update batch_auction with
-    batch.solve()
+    results = {}
+    try:
+        await asyncio.wait_for(batch.solve(results), solver_args.time_limit)
+    except asyncio.TimeoutError:
+        print("Time is over!")
+
+
+    print(results)
 
     sample_output = {
         "ref_token": batch.ref_token.value,
