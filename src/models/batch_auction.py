@@ -177,9 +177,18 @@ class BatchAuction:
 
         solution['approvals'] = []
         solution['interaction_data'] = []
+        solution['prices'] = {}
+        solution['orders'] = {}
+
         for o in orders:
             try:
+                if str(o.sell_token) in solution['prices'].keys() or str(o.buy_token) in solution['prices'].keys():
+                    continue
                 swap_result = await asyncio.to_thread(swap, str(o.sell_token), str(o.buy_token), int(o.max_sell_amount.balance))
+                exec_buy_amount = int(swap_result['buy_amount'])
+                if exec_buy_amount < int(o.buy_amount.balance):
+                    print("1inch couldn't satisfy limit price. Skipping ...")
+                    continue
                 solution['approvals'].append({
                     'token': str(o.sell_token),
                     'spender': settlement_contract_address,
@@ -190,6 +199,12 @@ class BatchAuction:
                     'value': 0,
                     'calldata': swap_result['tx_calldata']
                 })
+                solution['prices'][str(o.buy_token)] = int(o.max_sell_amount.balance)
+                solution['prices'][str(o.sell_token)] = exec_buy_amount
+                solution['orders'][o.order_id] = o
+                solution['orders'][o.order_id]['exec_sell_amount'] = int(o.max_sell_amount.balance)
+                solution['orders'][o.order_id]['exec_buy_amount'] = exec_buy_amount
+
             except asyncio.TimeoutError as err:
                 raise
             except Exception as err:
