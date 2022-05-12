@@ -15,7 +15,7 @@ def swap(sell_token, buy_token, sell_amount):
           'amount': sell_amount,
           'fromAddress': settlement_contract_address,
           'slippage': 50,
-          'disableEstimate': True,
+          'disableEstimate': "true",
       }
       r = requests.get('https://api.1inch.io/v4.0/100/swap', params=params)
       r.raise_for_status()
