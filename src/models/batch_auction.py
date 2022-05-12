@@ -173,7 +173,11 @@ class BatchAuction:
                             self.token_info(order.buy_token).external_price,
                         order.buy_token
                     )
-                return max(0, expected_buy_amount - min_buy_amount)
+                return max(
+                    0,
+                    (expected_buy_amount - min_buy_amount).as_decimal() * 
+                    self.token_info(order.buy_token).external_price
+                )
             else:
                 max_sell_amount = order.max_limit.convert(order.max_buy_amount)
                 # sell_amount/buy_amount = p(buy_token)/p(sell_token)
@@ -185,7 +189,11 @@ class BatchAuction:
                             self.token_info(order.sell_token).external_price,
                         order.sell_token
                     )
-                return max(0, max_sell_amount - expected_sell_amount)
+                return max(
+                    0,
+                    (max_sell_amount - expected_sell_amount).as_decimal() *
+                    self.token_info(order.sell_token).external_price
+                )
 
         return sorted(self.orders, key=expected_surplus, reverse=True)
 
