@@ -21,7 +21,7 @@ def swap(sell_token, buy_token, sell_amount):
       'tx_calldata': r['tx']['data'],
     }
 
-# allowance that settlement contract has give to 1inch
+# allowance that settlement contract has given to 1inch
 def allowance(token):
   params = {
     'tokenAddress': token,
@@ -48,7 +48,7 @@ def approve(token):
 
 if __name__ == '__main__':
   if False:
-    a = swap_1inch(
+    a = swap(
         # wxdai
         '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
         # usdc
