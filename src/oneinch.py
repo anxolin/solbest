@@ -1,9 +1,10 @@
 import requests
+import asyncio
 
 # TODO:
 # - allowance
 
-def swap_1inch(sell_token, buy_token, sell_amount):
+async def swap_1inch(sell_token, buy_token, sell_amount):
     payload = {
         'fromTokenAddress': sell_token,
         'toTokenAddress': buy_token,
@@ -13,7 +14,7 @@ def swap_1inch(sell_token, buy_token, sell_amount):
         'slippage': 50,
         'disableEstimate': True,
     }
-    r = requests.get('https://api.1inch.io/v4.0/100/swap', params=payload)
+    r = await asyncio.to_thread(requests.get('https://api.1inch.io/v4.0/100/swap', params=payload))
     r.raise_for_status()
     r =  r.json()
     return {
